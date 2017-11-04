@@ -62,48 +62,54 @@ int main()
 	
 	}
 	
-//	char n[10];
-//	
-//	printf("insira o numero de tentativas : ");
-//	fgets(n, 10, stdin); 
-//	
-//	int nTentativas = atoi(n);
-//	
-//	for (i = 0; i < nTentativas; i++){
-//		
-//		char str2[100];
-//		
-//		printf("Insira o login e a senha :\n");
-//		
-//		fgets(str2, 100, stdin);
-//    	
-//    	char *ch1;
-//  		ch1 = strtok(str2, " ");
-//  		printf("ch : %s\n", ch1);
-//  		
-//  		//verificação de nome
-//  		
-//  		int j;
-//  		int usuarioEncontrado = 0;
-//  		
-//  		for (j = 0; j < qtd; j++){
-//  			printf("usuarios.nome : %s\n", usuarios[j].nome);
-//  			
-//  			if(usuarios[j].nome == ch1){
-//  				usuarioEncontrado = 1;
-//			}
-//		}
-//		
-//		if (usuarioEncontrado == 0){
-//			printf("usuario não encontrado");
-//		}
-//  		
-//  		
-//  		//verificação de senha
-////  		ch = strtok(NULL, " ");
-////  		usuarios[i].senha = ch;
-////  		printf("senha : %s", usuarios[i].senha);
-//	}
+	char n[10];
+	
+	printf("insira o numero de tentativas : ");
+	fgets(n, 10, stdin); 
+	
+	int nTentativas = atoi(n);
+	
+	for (i = 0; i < nTentativas; i++){
+		
+		char str2[100];
+		
+		printf("Insira o login e a senha :\n");
+		
+		fgets(str2, 100, stdin);
+    	
+    	char *ch1;
+  		ch1 = strtok(str2, " ");
+  		printf("ch : %s\n", ch1);
+  		
+  		char str3[50];
+  		
+  		strcpy(str3, ch1);
+  		
+  		//verificação de nome
+  		
+  		int j;
+  		int usuarioEncontrado = 0;
+  		
+  		for (j = 0; j < qtd; j++){
+  			
+  			printf("comparando ch : %s == %s \n", str3, usuarios[j].nome);
+  			
+  			if (strcmp (usuarios[j].nome, str3) == 0){
+  				usuarioEncontrado = 1;
+  				printf("usuario encontrado : %d", usuarioEncontrado);
+			}
+		}
+		
+		if (usuarioEncontrado == 0){
+			printf("usuario nao encontrado\n");
+		}
+  		
+  		
+  		//verificação de senha
+//  		ch = strtok(NULL, " ");
+//  		usuarios[i].senha = ch;
+//  		printf("senha : %s", usuarios[i].senha);
+	}
     
     return 0;
 }
