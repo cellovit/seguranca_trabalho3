@@ -1,4 +1,18 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+
+unsigned int DJBHash(unsigned char* str) {
+	unsigned long hash = 5381;
+    int c;
+
+    while (c = *str++)
+        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+
+    return hash;
+}
 
 int main()
 {
@@ -26,10 +40,14 @@ int main()
     	char *ch;
   		ch = strtok(str1, " ");
   		usuarios[i].nome = ch;
-  		printf("nome : %s", usuarios[i].nome);
+  		printf("nome : %s ", usuarios[i].nome);
   		ch = strtok(NULL, " ");
   		usuarios[i].senha = ch;
   		printf("senha : %s", usuarios[i].senha);
+  		
+  		int senhaEncriptada = DJBHash(usuarios[i].senha);
+  		
+  		printf("senha encriptada : %d\n", senhaEncriptada);
 	}
     
     return 0;
