@@ -18,7 +18,7 @@ int main()
 {
 		struct user{
     	char* nome;
-    	char* senha;
+    	int senha;
 	};
 
 	char qtdUsuarios[10];	
@@ -42,12 +42,9 @@ int main()
   		usuarios[i].nome = ch;
   		printf("nome : %s ", usuarios[i].nome);
   		ch = strtok(NULL, " ");
-  		usuarios[i].senha = ch;
-  		printf("senha : %s", usuarios[i].senha);
   		
-  		int senhaEncriptada = DJBHash(usuarios[i].senha);
-  		
-  		printf("senha encriptada : %d\n", senhaEncriptada);
+  		usuarios[i].senha = DJBHash(ch);
+  		printf("senha : %d\n", usuarios[i].senha);  	
 	}
     
     return 0;
