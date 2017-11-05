@@ -16,12 +16,12 @@ unsigned int DJBHash(unsigned char* str) {
 
 int main()
 {
-		struct user{
+	struct user{
     	char nome[50];
     	char senha[50];
 	};
 
-	char qtdUsuarios[10];	
+	char qtdUsuarios[10];
 	int i = 0;
 	
     printf("Insira a quantidade de usuarios : ");
