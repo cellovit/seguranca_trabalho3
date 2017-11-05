@@ -79,11 +79,20 @@ int main()
     	
     	char *ch1;
   		ch1 = strtok(str2, " ");
-  		printf("ch : %s\n", ch1);
+  		printf("ch NOME : %s\n", ch1);  		
   		
   		char str3[50];
+  		char str4[50];
+  		
+  		// str 3 = nome a comparar
   		
   		strcpy(str3, ch1);
+  		
+  		// str 4 = senha a comparar
+  		
+  		ch1 = strtok(NULL, " ");
+  		printf("ch SENHA : %s\n", ch1);  	
+  		strcpy(str4, ch1);
   		
   		//verificação de nome
   		
@@ -92,11 +101,11 @@ int main()
   		
   		for (j = 0; j < qtd; j++){
   			
-  			printf("comparando ch : %s == %s \n", str3, usuarios[j].nome);
+  			// printf("comparando ch : %s == %s \n", str3, usuarios[j].nome);
   			
   			if (strcmp (usuarios[j].nome, str3) == 0){
   				usuarioEncontrado = 1;
-  				printf("usuario encontrado : %d", usuarioEncontrado);
+  				// printf("usuario encontrado : %d", usuarioEncontrado);
 			}
 		}
 		
@@ -106,6 +115,20 @@ int main()
   		
   		
   		//verificação de senha
+  		
+  		for (j = 0; j < qtd; j++){
+  			
+  			int senhaEncriptada = DJBHash(ch1);
+  			char senha1[50];
+			itoa(senhaEncriptada, senha1, 50);
+  			
+  			printf("comparando ch : %d == %s \n", senhaEncriptada, usuarios[j].senha);
+  			
+  			if (strcmp (usuarios[j].senha, senha1) == 0){
+  				printf("senha igual");
+			}
+		}
+  		
 //  		ch = strtok(NULL, " ");
 //  		usuarios[i].senha = ch;
 //  		printf("senha : %s", usuarios[i].senha);
