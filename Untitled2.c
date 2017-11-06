@@ -3,22 +3,46 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include <inttypes.h>
 
-unsigned int DJBHash(unsigned char* str) {
-	unsigned long hash = 5381;
-    int c;
+uint64_t DJBHash(unsigned char* str) {
+	uint64_t hash = 5381;
+    uint64_t c = *(str); //primeiro caractere
 
     while (c = *str++)
-        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+        hash = ((hash << 5) + hash) + c;  /* hash * 33 + c */
 
     return hash;
+}
+
+void int64ToChar(char mesg[], int64_t num) {
+	int i;
+  for(i = 0; i < 8; i++) mesg[i] = num >> (8-1-i)*8;
+}
+
+int64_t charTo64bitNum(char a[]) {
+  int64_t n = 0;
+  n = ((a[0] << 56) & 0xFF00000000000000U)
+    | ((a[1] << 48) & 0x00FF000000000000U)
+    | ((a[2] << 40) & 0x0000FF0000000000U)
+    | ((a[3] << 32) & 0x000000FF00000000U)
+    | ((a[4] << 24) & 0x00000000FF000000U)
+    | ((a[5] << 16) & 0x0000000000FF0000U)
+    | ((a[6] <<  8) & 0x000000000000FF00U)
+    | ( a[7]        & 0x00000000000000FFU);
+  return n;
+}
+
+int64_t convert(const char* input)
+{
+    return *((int64_t*)input);
 }
 
 int main()
 {
 	struct user{
     	char nome[50];
-    	char senha[50];
+    	uint64_t senha;
 	};
 
 	char qtdUsuarios[10];
@@ -41,26 +65,36 @@ int main()
   		ch = strtok(str1, " ");
   		strcpy(usuarios[i].nome, ch);
   		
-//  		usuarios[i].nome = ch;
   		printf("nome : %s ", usuarios[i].nome);
   		ch = strtok(NULL, " ,");
-//  		usuarios[i].senha = ch;
-		strcpy(usuarios[i].senha, ch);
-  		printf("senha : %s", usuarios[i].senha);
   		
   		
-//  		int senhaEncriptada = DJBHash(usuarios[i].senha);
-//  		
-//  		printf("senha encriptada : %d\n", senhaEncriptada);
+  		//RESOLVER SE VAI PEGAR A SENHA SEPARADA OU NA MESMA STRING
+  		
+		char senha1[50];
+		strcpy(senha1, ch);
+		
+		// usuarios[i].senha = charTo64bitNum(senha1);
+		usuarios[i].senha = (uint64_t) senha1;
+		
+//		printf("insira a senha");
+//		scanf("%"SCNu64, &usuarios[i].senha);
+//		
+		// usuarios[i].senha = convert(ch);
+		
+		printf("senha salva: ");
+		printf("%" PRIu64 "\n", usuarios[i].senha);
+  		
+  		
 	}
 	
-	for (i = 0; i < qtd; i++){
-		printf("\ntestando\n");
-		printf("nome : %s", usuarios[i].nome);
-		printf("\n");
-		printf("senha : %s", usuarios[i].senha);
-	
-	}
+//	for (i = 0; i < qtd; i++){
+//		printf("\ntestando\n");
+//		printf("nome : %s", usuarios[i].nome);
+//		printf("\n");
+//		printf("senha : %s", usuarios[i].senha);
+//	
+//	}
 	
 	char n[10];
 	
@@ -93,7 +127,7 @@ int main()
   		ch1 = strtok(NULL, " ");
   		printf("ch SENHA : %s\n", ch1);  	
   		strcpy(str4, ch1);
-  		
+
   		//verificação de nome
   		
   		int j;
@@ -103,35 +137,67 @@ int main()
   			
   			// printf("comparando ch : %s == %s \n", str3, usuarios[j].nome);
   			
+  			int indiceUsuarioEncontrado = -1;
+  			
   			if (strcmp (usuarios[j].nome, str3) == 0){
   				usuarioEncontrado = 1;
+  				
+  				indiceUsuarioEncontrado = j;
   				// printf("usuario encontrado : %d", usuarioEncontrado);
 			}
+			
+			if (usuarioEncontrado == 1){
+				uint64_t senha1 = DJBHash(ch1);
+				printf("senha1: ");
+				printf("%" PRIu64 "\n", senha1);
+			
+				if (senha1 == usuarios[indiceUsuarioEncontrado].senha) {
+					printf("login aceito\n");
+					break;
+				}else{
+					printf("login recusado\n");
+					break;
+				}
+			}else{
+				printf("usuario nao encontrado\n");
+				break;
+			}
+			
+			 
 		}
 		
-		if (usuarioEncontrado == 0){
-			printf("usuario nao encontrado\n");
-		}
+//		if (usuarioEncontrado == 0){
+//			printf("usuario nao encontrado\n");
+//			break;
+//		}
   		
   		
   		//verificação de senha
   		
-  		for (j = 0; j < qtd; j++){
-  			
-  			int senhaEncriptada = DJBHash(ch1);
-  			char senha1[50];
-			itoa(senhaEncriptada, senha1, 50);
-  			
-  			printf("comparando ch : %d == %s \n", senhaEncriptada, usuarios[j].senha);
-  			
-  			if (strcmp (usuarios[j].senha, senha1) == 0){
-  				printf("senha igual");
-			}
-		}
+  				
+//		uint64_t senha1;
+//		printf("insira a senha");
+//		scanf("%"SCNu64, &senha1);
   		
-//  		ch = strtok(NULL, " ");
-//  		usuarios[i].senha = ch;
-//  		printf("senha : %s", usuarios[i].senha);
+  		
+//  		for (j = 0; j < qtd; j++){
+  			
+//  			int senhaEncriptada = DJBHash(ch1);
+//  			char senha1[50];
+//			itoa(senhaEncriptada, senha1, 10);
+  			
+  			// printf("comparando ch : %d == %s \n", senhaEncriptada, usuarios[j].senha);
+  			
+//  			printf("usuarios[j].senha: ");
+//			printf("%" PRIu64 "\n", usuarios[j].senha);
+//  			
+//  			printf("senha1: ");
+//			printf("%" PRIu64 "\n", senha1);
+
+				
+//			
+//		}
+  		
 	}
     
     return 0;
